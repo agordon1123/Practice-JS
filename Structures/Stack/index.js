@@ -1,4 +1,4 @@
-function Stack(capacity=10) {
+function Stack() {
   this.size = 0;
   this.storage = [];
 }
