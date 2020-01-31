@@ -43,7 +43,11 @@ LinkedList.prototype.contains = function(value) {
 
 LinkedList.prototype.reverseList = function() {
   // FILL THIS IN
-  return;
+  let current = this.head;
+  while (current) {
+    this.addToHead(current.value);
+    current = current.nextNode;
+  }
 };
 
 LinkedList.prototype.print = function() {

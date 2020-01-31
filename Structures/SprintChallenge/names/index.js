@@ -1,5 +1,6 @@
 const fs = require("fs");
 const { performance } = require("perf_hooks");
+const { BinarySearchTree } = require('../../BinarySearchTree');
 
 const startTime = performance.now();
 
@@ -16,11 +17,16 @@ let data2 = fs.readFileSync(
 let names2 = data2.split("\r\n");
 
 const duplicates = [];
-for (let name1 of names1) {
-  for (let name2 of names2) {
-    if (name1 === name2) {
-      duplicates.push(name1);
-    }
+
+const BST = new BinarySearchTree();
+
+for (let i=0; i < names1.length; i++) {
+  BST.insert(names1[i]);
+}
+
+for (let j=0; j < names2.length; j++) {
+  if (BST.contains(names2[j])) {
+    duplicates.push(names[j]);
   }
 }
 
