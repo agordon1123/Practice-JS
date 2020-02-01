@@ -9,7 +9,20 @@ function reconstructTrip(tickets, length) {
   let ht = new HashTable(length);
   const path = new Array(length).fill(null);
 
-  return path;
+  // insert into hashtable
+  for (let i = 0; i < length; i++) {
+    ht.insert(tickets[i].source, tickets[i].destination);
+  }
+
+  // init first move in itinerary
+  let target = ht.retrieve("NONE");
+
+  for (let j = 0; j < length; j++) {
+    // chain together source and destination for each
+    path[j] = target.value;
+    target = ht.retrieve(target.value);
+  }
+  return path
 }
 module.exports = { Ticket, reconstructTrip };
 
