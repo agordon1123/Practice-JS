@@ -4,37 +4,145 @@ function Graph() {
   this.vertices = {};
 }
 
-Graph.prototype.addVertex = function(vertex) {};
+Graph.prototype.addVertex = function(vertex) {
+  if (!this.vertices[vertex]) {
+    this.vertices[vertex] = new Set();
+  } else {
+    return null;
+  }
+};
 
-Graph.prototype.addEdge = function(v1, v2) {};
+Graph.prototype.addEdge = function(v1, v2) {  
+  if (this.vertices[v1] && this.vertices[v2]) {
+    this.vertices[v1].add(v2);
+  }
+};
 
-Graph.prototype.getNeighbors = function(vertexId) {};
+Graph.prototype.getNeighbors = function(vertexId) {
+  return this.vertices[vertexId];
+};
 
 Graph.prototype.bft = function(startingVertex) {
   // Print each vertex in breadth-first order
   // beginning from starting_vertex.
+  let queue = new Queue();
+  queue.enqueue(startingVertex);
+  let visited = new Set();
+
+  while (queue.len() > 0) {
+    let vert = queue.dequeue();
+
+    if (!visited.has(vert)) {
+      console.log(vert);
+      visited.add(vert);
+
+      let neighbor;
+      for (neighbor of this.vertices[vert]) {
+        queue.enqueue(neighbor);
+      }
+    }
+  }
 };
 
 Graph.prototype.dft = function(startingVertex) {
   // Print each vertex in depth-first order
   // beginning from starting_vertex.
+  let stack = new Stack();
+  stack.push(startingVertex);
+  let visited = new Set();
+
+  while (stack.len() > 0) {
+    let vert = stack.pop();
+    
+    if (!visited.has(vert)) {
+      console.log(vert);
+      visited.add(vert);
+
+      let neighbor;
+      for (neighbor of this.vertices[vert]) {
+        stack.push(neighbor);
+      }
+    }
+  }
 };
 
 Graph.prototype.dftRecursive = function(startingVertex, visited = null) {
   // Print each vertex in depth-first order
   // beginning from starting_vertex.
   // This should be done using recursion.
+
+  if (visited === null) {
+    visited = new Set();
+  }
+  visited.add(startingVertex);
+  console.log(startingVertex);
+
+  let neighbor;
+  for (neighbor of this.vertices[startingVertex]) {
+    if (!visited.has(neighbor)) {
+      this.dftRecursive(neighbor, visited);
+    }
+  }
 };
+
 Graph.prototype.bfs = function(startingVertex, destinationVertex) {
   // Return a list containing the shortest path from
   // starting_vertex to destination_vertex in
   // breath-first order.
+
+  let queue = new Queue();
+  queue.enqueue([startingVertex]);
+  let visited = new Set();
+
+  while (queue.len() > 0) {
+    let path = queue.dequeue();
+    let last = path[path.length - 1];
+
+    if (!visited.has(last)) {
+      if (last === destinationVertex) {
+        return path
+      } else {
+        visited.add(last);
+        let neighbor;
+        for (neighbor of this.vertices[last]) {
+          let copy = [...path];
+          copy.push(neighbor);
+          queue.enqueue(copy);
+        }
+      }
+    }
+  }
+
 };
 
 Graph.prototype.dfs = function(startingVertex, destinationVertex) {
   // Return a list containing a path from
   // starting_vertex to destination_vertex in
   // depth-first order.
+
+  let stack = new Stack();
+  stack.push([startingVertex]);
+  let visited = new Set();
+
+  while (stack.len() > 0) {
+    let path  = stack.pop();
+    let last = path[path.length - 1];
+
+    if (!visited.has(last)) {
+      if (last === destinationVertex) {
+        return path;
+      } else {
+        visited.add(last);
+        let neighbor;
+        for (neighbor of this.vertices[last]) {
+          let copy = [...path];
+          copy.push(neighbor);
+          stack.push(copy);
+        }
+      }
+
+    }
+  }
 };
 
 let graph = new Graph();
